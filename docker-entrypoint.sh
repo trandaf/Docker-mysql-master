@@ -71,9 +71,11 @@ if [ "$1" = 'mysqld' ]; then
 
 			if [ "$MYSQL_DATABASE" ]; then
 				echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" | "${mysql[@]}"
+				echo "GRANT ALL ON *.* TO '$MYSQL_USER'@'%' ;" | "${mysql[@]}"
 			fi
 
 			echo 'FLUSH PRIVILEGES ;' | "${mysql[@]}"
+			echo -e "[mysqld]\nserver-id=1" >> /etc/mysql/my.cnf
 		fi
 
 		echo
@@ -98,11 +100,5 @@ if [ "$1" = 'mysqld' ]; then
 
 	chown -R mysql:mysql "$DATADIR"
 fi
-
-echo -e "[mysqld]\nserver-id=1" > /etc/mysql/conf.d/server_id.cnf
-echo -e "[mysqld]\nbinlog_do_db=magento" > /etc/mysql/my.cnf
-echo "GRANT REPLICATION SLAVE ON *.* TO '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;" | "${mysql[@]}"
-echo 'FLUSH PRIVILEGES ;' | "${mysql[@]}"
-
 
 exec "$@"
