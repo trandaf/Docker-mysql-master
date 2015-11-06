@@ -76,6 +76,8 @@ if [ "$1" = 'mysqld' ]; then
 
 			echo 'FLUSH PRIVILEGES ;' | "${mysql[@]}"
 			echo -e "[mysqld]\nserver-id=1" >> /etc/mysql/my.cnf
+			echo -e "[mysqld]\nlog_bin=/var/log/mysql/mysql-bin.log" >> /etc/mysql/my.cnf
+			echo -e "[mysqld]\nbinlog_do_db=magento" >> /etc/mysql/my.cnf
 		fi
 
 		echo
